@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080d16">
+
+    <title>BATCOMPUTER // CASE 0912</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =========================================
+         OPENING SCREEN
+    ========================================== -->
+
+    <section id="intro" class="screen intro">
+
+        <div class="intro-box">
+
+            <p class="eyebrow">WAYNE ENTERPRISES // SECURE SYSTEM</p>
+
+            <div class="bat-symbol">BATCOMPUTER</div>
+
+            <div class="rule"></div>
+
+            <p class="eyebrow">CASE 0912 // PART II</p>
+
+            <h1>THE FALL OF NIGHTWING</h1>
+
+            <p>
+                One ordinary stop.
+                One impossible discovery.
+            </p>
+
+            <button id="begin" class="primary">
+                OPEN CASE FILE
+            </button>
+
+            <p class="muted">
+                CLASSIFIED // AUTHORISED PERSONNEL ONLY
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         CINEMATIC SCENES
+    ========================================== -->
+
+    <section id="cinema" class="screen cinema hidden">
+
+        <div class="scene-box">
+
+            <p class="eyebrow" id="sceneTag"></p>
+
+            <h1 id="sceneTitle"></h1>
+
+            <p id="sceneBody"></p>
+
+            <blockquote id="sceneQuote"></blockquote>
+
+            <button id="sceneNext" class="primary">
+                CONTINUE
+            </button>
+
+            <p class="muted" id="sceneProgress"></p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         CHAPTER 1: NIGHTWING INVESTIGATION
+    ========================================== -->
+
+    <main id="app" class="hidden">
+
+        <header class="topbar">
+
+            <div class="topbar-brand">
+                <strong>BATCOMPUTER</strong>
+                <small>CASE 0912 // THE FALL OF NIGHTWING</small>
+            </div>
+
+            <div class="top-actions">
+
+                <div class="clock">
+                    <small>TIME REMAINING</small>
+                    <strong id="clock">15:00</strong>
+                </div>
+
+                <button id="sound" class="icon-btn">
+                    SOUND: OFF
+                </button>
+
+                <button id="restart" class="icon-btn">
+                    RESTART
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <div class="shell">
+
+            <!-- SIDEBAR -->
+
+            <nav class="sidebar">
+
+                <p class="eyebrow">INVESTIGATION</p>
+
+                <button class="nav active" data-page="overview">
+                    01 / CASE OVERVIEW
+                </button>
+
+                <button class="nav" data-page="suspects">
+                    02 / PERSONS OF INTEREST
+                </button>
+
+                <button class="nav" data-page="locations">
+                    03 / FIELD LOCATIONS
+                </button>
+
+                <button class="nav" data-page="evidence">
+                    04 / EVIDENCE ARCHIVE
+                </button>
+
+                <button class="nav" data-page="timeline">
+                    05 / TIMELINE
+                </button>
+
+                <button class="nav" data-page="board">
+                    06 / CONNECTION BOARD
+                </button>
+
+                <button class="nav" data-page="report">
+                    07 / FINAL REPORT
+                </button>
+
+                <div class="sidebar-bottom">
+                    WAYNE ENTERPRISES
+                    <br>
+                    ENCRYPTED CONNECTION
+                    <br>
+                    <span id="progress">0 FILES RECOVERED</span>
+                </div>
+
+            </nav>
+
+
+            <!-- MAIN WORKSPACE -->
+
+            <div class="workspace">
+
+                <!-- CASE OVERVIEW -->
+
+                <section id="overview" class="page">
+
+                    <p class="eyebrow">
+                        PRIORITY ONE // HOMICIDE
+                    </p>
+
+                    <h1>CASE OVERVIEW</h1>
+
+                    <p class="sub">
+                        BATBURGER // GOTHAM // 00:17
+                    </p>
+
+                    <article class="warning">
+
+                        <p class="eyebrow">CONFIRMED DECEASED</p>
+                                                <h2>RICHARD "DICK" GRAYSON</h2>
+
+                        <p>
+                            Stephanie Brown discovered Nightwing
+                            on the restroom floor during a late-night stop.
+
+                            He had been severely beaten.
+
+                            The family did not arrive expecting
+                            a crime scene.
+                        </p>
+
+                    </article>
+
+                    <div class="stats">
+
+                        <div>
+                            <small>CASE</small>
+                            <strong>0912</strong>
+                        </div>
+
+                        <div>
+                            <small>STATUS</small>
+                            <strong>ACTIVE</strong>
+                        </div>
+
+                        <div>
+                            <small>TIME LIMIT</small>
+                            <strong>15 MIN</strong>
+                        </div>
+
+                    </div>
+
+                    <article class="panel">
+
+                        <h2>INVESTIGATION DIRECTIVE</h2>
+
+                        <p>
+                            Determine who killed Nightwing,
+                            reconstruct the sequence of events,
+                            and identify any accomplices.
+
+                            The files contain conflicting statements.
+                            Not every lead is genuine.
+                        </p>
+
+                        <p>
+                            Explore the locations, interrogate suspects,
+                            compare evidence, and submit an open-ended report.
+
+                            You may submit at any time.
+                            At 00:00, the investigation closes automatically.
+                        </p>
+
+                    </article>
+
+                    <article class="panel">
+
+                        <h2>INCOMING TRANSMISSIONS</h2>
+
+                        <div id="transmissions" class="transmissions">
+
+                            <p>
+                                <span>BARBARA // 00:20</span>
+
+                                I've opened a secure line.
+
+                                Some of these records don't match
+                                the police copies.
+
+                                Don't assume either version is right.
+                            </p>
+
+                        </div>
+
+                    </article>
+
+                </section>
+
+
+                <!-- SUSPECTS -->
+
+                <section id="suspects" class="page hidden">
+
+                    <p class="eyebrow">DATABASE // RESTRICTED</p>
+
+                    <h1>PERSONS OF INTEREST</h1>
+
+                    <p class="sub">
+                        Six primary leads.
+                        Additional names may emerge from the evidence.
+                    </p>
+
+                    <div id="suspectList" class="card-grid"></div>
+
+                    <div id="suspectDetail" class="panel hidden"></div>
+
+                </section>
+
+
+                <!-- LOCATIONS -->
+
+                <section id="locations" class="page hidden">
+
+                    <p class="eyebrow">
+                        FIELD ACCESS // REMOTE EXAMINATION
+                    </p>
+
+                    <h1>INVESTIGATION LOCATIONS</h1>
+
+                    <p class="sub">
+                        Select a location, then examine individual objects.
+                        Some findings are easy to overlook.
+                    </p>
+
+                    <div id="locationList" class="card-grid"></div>
+
+                    <div id="locationDetail" class="panel hidden"></div>
+
+                </section>
+
+
+                <!-- EVIDENCE ARCHIVE -->
+
+                <section id="evidence" class="page hidden">
+
+                    <p class="eyebrow">
+                        ARCHIVE // CHAIN OF CUSTODY
+                    </p>
+
+                    <h1>EVIDENCE FILES</h1>
+
+                    <p class="sub">
+                        Recovered material remains accessible
+                        for the duration of the case.
+                    </p>
+
+                    <div id="evidenceList" class="card-grid"></div>
+
+                    <div id="evidenceDetail" class="panel hidden"></div>
+
+                </section>
+
+
+                <!-- TIMELINE -->
+
+                <section id="timeline" class="page hidden">
+
+                    <p class="eyebrow">
+                        RECONSTRUCTION // UNVERIFIED
+                    </p>
+
+                    <h1>EVENT TIMELINE</h1>
+
+                    <div id="timelineList" class="panel"></div>
+
+                </section>
+
+
+                <!-- CONNECTION BOARD -->
+
+                <section id="board" class="page hidden">
+
+                    <p class="eyebrow">ANALYST WORKSPACE</p>
+
+                    <h1>CONNECTION BOARD</h1>
+
+                    <p class="sub">
+                        Pin recovered files and write your own connections.
+                                                Nothing here will solve the case for you.
+                    </p>
+
+                    <div class="panel">
+
+                        <h2>PINNED EVIDENCE</h2>
+
+                        <div id="pinned" class="pinned"></div>
+
+                        <label for="boardTheory">YOUR THEORY</label>
+
+                        <textarea
+                            id="boardTheory"
+                            rows="8"
+                            placeholder="Which details connect? Which testimony doesn't fit?"
+                        ></textarea>
+
+                    </div>
+
+                </section>
+
+
+                <!-- FINAL REPORT -->
+
+                <section id="report" class="page hidden">
+
+                    <p class="eyebrow">CASE FILE // SUBMISSION</p>
+
+                    <h1>FINAL INVESTIGATION REPORT</h1>
+
+                    <p class="sub">
+                        All responses are open-ended.
+                        There is no automated grading.
+                    </p>
+
+                    <form id="reportForm">
+
+                        <div class="panel">
+
+                            <label for="r1">
+                                01 / WHO IS YOUR PRIMARY SUSPECT?
+                            </label>
+
+                            <textarea
+                                id="r1"
+                                rows="3"
+                                placeholder="Name the person you believe killed Nightwing..."
+                            ></textarea>
+
+                        </div>
+
+                        <div class="panel">
+
+                            <label for="r2">
+                                02 / RECONSTRUCT THE EVENTS
+                                LEADING TO NIGHTWING'S DEATH.
+                            </label>
+
+                            <textarea
+                                id="r2"
+                                rows="4"
+                                placeholder="Describe your proposed sequence of events..."
+                            ></textarea>
+
+                        </div>
+
+                        <div class="panel">
+
+                            <label for="r3">
+                                03 / WHAT WAS THE MOTIVE?
+                            </label>
+
+                            <textarea
+                                id="r3"
+                                rows="3"
+                                placeholder="Explain why the murder happened..."
+                            ></textarea>
+
+                        </div>
+
+                        <div class="panel">
+
+                            <label for="r4">
+                                04 / WHAT EVIDENCE SUPPORTS YOUR THEORY
+                                AND CHALLENGES OTHER ALIBIS?
+                            </label>
+
+                            <textarea
+                                id="r4"
+                                rows="4"
+                                placeholder="Refer to specific recovered evidence..."
+                            ></textarea>
+
+                        </div>
+
+                        <div class="panel">
+
+                            <label for="r5">
+                                05 / WHO ELSE MAY HAVE BEEN INVOLVED,
+                                AND WHAT REMAINS UNANSWERED?
+                            </label>
+
+                            <textarea
+                                id="r5"
+                                rows="4"
+                                placeholder="Identify uncertainties, connections or possible accomplices..."
+                            ></textarea>
+
+                        </div>
+
+                        <button class="primary" type="submit">
+                            SUBMIT FINAL REPORT
+                        </button>
+
+                        <p class="muted">
+                            Submission permanently ends
+                            the 15-minute investigation.
+                        </p>
+
+                    </form>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================================
+         INVESTIGATOR NOTEBOOK
+    ========================================== -->
+
+    <button
+        id="notebookButton"
+        class="notebook-btn hidden"
+        aria-label="Open investigator notebook"
+        title="Investigator notebook"
+    >
+        NOTES
+    </button>
+
+    <div id="notesShade" class="shade hidden"></div>
+
+    <aside id="notebook" class="notebook hidden">
+
+        <div class="notebook-head">
+
+            <h2>INVESTIGATOR NOTEBOOK</h2>
+
+            <button id="closeNotebook" class="icon-btn">
+                CLOSE
+            </button>
+
+        </div>
+
+        <p class="muted">
+            Notes remain available during this playthrough.
+            Refreshing the website clears them for the next group.
+        </p>
+
+        <div class="notebook-row">
+
+            <input
+                id="noteTitle"
+                placeholder="New entry title"
+            >
+
+            <button id="addNote" class="primary">
+                                ADD
+            </button>
+
+        </div>
+
+        <div id="noteList"></div>
+
+    </aside>
+
+
+    <!-- =========================================
+         CHAPTER 1 ENDING
+    ========================================== -->
+
+    <section id="transition" class="screen cinema hidden">
+
+        <div class="scene-box">
+
+            <p class="eyebrow" id="transitionTag"></p>
+
+            <h1 id="transitionTitle"></h1>
+
+            <p id="transitionBody"></p>
+
+            <button id="transitionNext" class="primary">
+                CONTINUE
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         CHAPTER BRIEFING SCREEN
+         REUSED FOR CHAPTERS 2, 3 AND 4
+    ========================================== -->
+
+    <section id="chapterTwoBrief" class="screen cinema hidden">
+
+        <div class="scene-box chapter-brief">
+
+            <p class="eyebrow" id="chapterBriefEyebrow">
+                NEW OBJECTIVE // CHAPTER 02
+            </p>
+
+            <p class="chapter-badge" id="chapterBriefBadge">
+                SECONDARY INCIDENT DETECTED
+            </p>
+
+            <h1 id="chapterBriefTitle">
+                THE LAST TRANSMISSION
+            </h1>
+
+            <p id="chapterBriefBody"></p>
+
+            <div id="jasonPhone" class="jason-phone hidden" role="status" aria-live="polite">
+
+                <div class="phone-top">
+                    JASON TODD // INCOMING MESSAGE
+                    <span>02:14</span>
+                </div>
+
+                <div class="phone-sender">
+                    UNKNOWN CONTACT // ENCRYPTED
+                </div>
+
+                <div class="phone-message">
+                    We are no longer obeying you.<br>
+                    We have a higher leader now.
+                </div>
+
+                <div class="phone-foot">
+                    MESSAGE SOURCE UNVERIFIED // TRACE FAILED
+                </div>
+
+            </div>
+
+            <div class="brief-details">
+
+                <div>
+                    <small>SUBJECT</small>
+                    <strong id="chapterBriefSubject">JASON TODD</strong>
+                </div>
+
+                <div>
+                    <small>STATUS</small>
+                    <strong id="chapterBriefStatus">UNDER INVESTIGATION</strong>
+                </div>
+
+                <div>
+                    <small>INVESTIGATION WINDOW</small>
+                    <strong id="chapterBriefTime">10:00</strong>
+                </div>
+
+            </div>
+
+            <h2>YOUR MISSION</h2>
+
+            <p id="chapterBriefMission"></p>
+
+            <p class="muted" id="chapterBriefNote">
+                Your investigator notebook remains accessible.
+            </p>
+
+            <button id="chapterTwoBriefNext" class="primary">
+                BEGIN INVESTIGATION
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         CHAPTER INVESTIGATION SCREEN
+         REUSED FOR CHAPTERS 2, 3 AND 4
+    ========================================== -->
+
+    <section id="aftermath" class="screen aftermath hidden">
+
+        <div class="after-shell">
+
+            <!-- CHAPTER HEADER -->
+
+            <div class="chapter-two-top">
+
+                <div>
+
+                    <p class="eyebrow" id="chapterInvestigationEyebrow">
+                        CHAPTER 02 // BLÜDHAVEN
+                    </p>
+
+                    <h1 id="chapterInvestigationTitle">
+                        THE LAST TRANSMISSION
+                    </h1>
+
+                    <p id="chapterInvestigationObjective">
+                        Investigate the disruption within Jason's operation.
+                    </p>
+
+                </div>
+
+                <div class="chapter-timer">
+
+                    <small>TIME REMAINING</small>
+
+                    <strong id="chapterTwoClock">10:00</strong>
+
+                    <small id="chapterTwoProgress">
+                        0 CLUES EXAMINED
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- CHAPTER GUIDE -->
+
+            <div class="chapter-guide">
+
+                <strong>HOW TO INVESTIGATE</strong>
+
+                <p>
+                    <b>1.</b> Choose a location below.
+
+                    <b>2.</b> Click an object to examine it.
+
+                    <b>3.</b> Compare the recovered files.
+
+                    <b>4.</b> Submit your reconstruction.
+                </p>
+
+            </div>
+                        <!-- LOCATION SELECTOR -->
+
+            <h2>01 / SELECT A LOCATION</h2>
+
+            <div
+                id="afterLocations"
+                class="card-grid chapter-location-grid"
+            ></div>
+
+
+            <!-- OBJECT EXAMINATION -->
+
+            <div
+                id="afterObjects"
+                class="panel chapter-inspection"
+            >
+
+                <p class="muted">
+                    Select a location to begin examining the scene.
+                </p>
+
+            </div>
+
+
+            <!-- RECOVERED FILE -->
+
+            <div
+                id="afterDetail"
+                class="panel chapter-file hidden"
+            ></div>
+
+
+            <!-- INVESTIGATION DOSSIERS / EVIDENCE ARCHIVE / CONNECTION BOARD -->
+
+            <h2>02 / PERSONS OF INTEREST</h2>
+
+            <p class="muted">
+                Read each account. A motive is not proof,
+                and several records contradict one another.
+            </p>
+
+            <div id="chapterDossiers"></div>
+
+
+            <h2>03 / RECOVERED EVIDENCE ARCHIVE</h2>
+
+            <div id="chapterArchive" class="card-grid"></div>
+
+
+            <div class="panel">
+
+                <h2>04 / CONNECTION BOARD</h2>
+
+                <div id="chapterPinned" class="pinned"></div>
+
+                <label for="chapterBoardTheory">
+                    YOUR WORKING THEORY
+                </label>
+
+                <textarea
+                    id="chapterBoardTheory"
+                    rows="6"
+                    placeholder="Compare alibis, disputed clues and the chain of command..."
+                ></textarea>
+
+            </div>
+
+
+            <!-- CHAPTER REPORT -->
+
+            <div class="panel chapter-report">
+
+                <p class="eyebrow" id="chapterReportEyebrow">
+                    02 / INVESTIGATION REPORT
+                </p>
+
+                <h2 id="chapterReportTitle">
+                    WHAT REALLY HAPPENED?
+                </h2>
+
+                <p id="chapterReportPrompt">
+                    Reconstruct the events using the evidence you recovered.
+                    Explain which details support your theory
+                    and what remains uncertain.
+                </p>
+
+                <label for="afterTheory">
+                    YOUR INVESTIGATION REPORT
+                </label>
+
+                <textarea
+                    id="afterTheory"
+                    rows="7"
+                    placeholder="Our reconstruction is... The evidence that supports this is... We still cannot explain..."
+                ></textarea>
+
+                <button id="finishAfter" class="primary">
+                    SUBMIT CHAPTER FINDINGS
+                </button>
+
+                <p class="muted">
+                    You can submit at any time.
+                    The investigation automatically ends at 00:00.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         FINAL HACKING SEQUENCE
+    ========================================== -->
+
+    <section id="hack" class="screen hack hidden">
+
+        <div class="hack-content">
+
+            <p class="eyebrow" id="hackHeader">
+                BATCOMPUTER // REMOTE SESSION
+            </p>
+
+            <div id="hackLog" aria-live="polite"></div>
+
+            <div id="hackGlitch" class="hack-glitch hidden">
+                <span>UNAUTHORISED ACCESS</span>
+                <span>UNAUTHORISED ACCESS</span>
+                <span>UNAUTHORISED ACCESS</span>
+            </div>
+
+            <h1 id="hackFinal" class="hidden">
+                MYSTERY NOT OVER YET~
+            </h1>
+
+            <p id="hackSub" class="hidden">
+                END OF PART II // CONNECTION LOST
+            </p>
+
+            <button id="review" class="icon-btn hidden">
+                REVIEW SAVED REPORT
+            </button>
+
+            <div id="savedReport" class="panel hidden"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         NOTIFICATIONS
+    ========================================== -->
+
+    <div
+        id="toast"
+        class="toast hidden"
+        role="status"
+    ></div>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
