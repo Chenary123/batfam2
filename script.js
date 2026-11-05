@@ -2917,3 +2917,282 @@ gamePhase = "intro";
 // =========================================================
 // END OF BATCOMPUTER // CASE 0912
 // =========================================================
+/* =========================================================
+   BATCOMPUTER // INTERROGATION TERMINAL
+   ========================================================= */
+
+const interrogationChats = {};
+let activeInterrogation = null;
+
+function interrogationPeople() {
+    if (gamePhase === "chapter1") {
+        return suspects.map(s => ({
+            id: s.id,
+            name: s.name,
+            role: s.alias,
+            background: s.background,
+            motive: s.motive,
+            alibi: s.alibi,
+            statement: s.response
+        }));
+    }
+
+    const chapter = currentChapter;
+    return (chapterDossiers[chapter] || []).map((d, i) => ({
+        id: `ch${chapter}-${i}`,
+        name: d[0],
+        role: d[1],
+        background: d[2],
+        motive: d[2],
+        alibi: d[3],
+        statement: d[2],
+        contradiction: d[3]
+    }));
+}
+
+function getInterrogationAnswer(person, question, history) {
+    const q = question.toLowerCase().trim();
+
+    const topics = {
+        alibi: /where|alibi|location|when|time|tonight|that night/,
+        motive: /why|motive|reason|want|benefit|gain/,
+        victim: /nightwing|dick|grayson|victim|death|murder|kill/,
+        evidence: /evidence|proof|clue|record|file|camera|footage/,
+        suspect: /who|suspect|responsible|behind|leader|orders|boss/,
+        lie: /lie|lying|truth|honest|contradict|inconsistent/,
+        identity: /name|identity|who are you|yourself/
+    };
+
+    if (/^(hi|hello|hey|good evening)[.!? ]*$/.test(q)) {
+        return `${person.name}: You have my attention. Ask your question.`;
+    }
+
+    if (topics.identity.test(q)) {
+        return `${person.name}: You have my file. It says ${person.role}. What exactly are you trying to establish?`;
+    }
+
+    if (topics.alibi.test(q)) {
+        return `${person.name}: ${person.alibi}`;
+    }
+
+    if (topics.motive.test(q)) {
+        return `${person.name}: ${person.motive}`;
+    }
+
+    if (topics.victim.test(q)) {
+        return `${person.name}: ${person.statement}`;
+    }
+
+    if (topics.evidence.test(q)) {
+        return `${person.name}: ${person.contradiction ||
+            "I know what the records say. That doesn't mean you've interpreted them correctly."}`;
+    }
+
+    if (topics.suspect.test(q)) {
+        return `${person.name}: You're asking me to name someone without proving anything. Look at the timeline and follow the evidence.`;
+    }
+
+    if (topics.lie.test(q)) {
+        return `${person.name}: ${person.contradiction ||
+            "You can question my account. That doesn't automatically make it false."}`;
+    }
+
+    if (/^(how|what) (so|about)|explain|elaborate|continue|go on|and then/.test(q)) {
+        const previous = [...history].reverse()
+            .find(message => message.from === "suspect");
+
+        return previous
+            ? `${person.name}: I've told you what I know. If you think something doesn't fit, tell me which detail.`
+            : `${person.name}: Be more specific.`;
+    }
+
+    return `${person.name}: That's not a question I can answer from what I know. Ask me about my whereabouts, the evidence, or my involvement.`;
+}
+
+function setupInterrogationTerminal() {
+    const terminal = document.createElement("section");
+    terminal.id = "interrogationTerminal";
+    terminal.className = "panel interrogation-terminal hidden";
+
+    terminal.innerHTML = `
+        <p class="eyebrow">BATCOMPUTER // LIVE INTERROGATION</p>
+        <h2>INTERROGATION TERMINAL</h2>
+
+        <label for="interrogationSelect">SELECT PERSON OF INTEREST</label>
+        <select id="interrogationSelect"></select>
+
+        <div id="interrogationChat"
+             class="interrogation-chat"
+             role="log"
+             aria-live="polite"></div>
+
+        <form id="interrogationForm">
+            <label for="interrogationQuestion">YOUR QUESTION</label>
+            <div class="interrogation-compose">
+                <input id="interrogationQuestion"
+                       type="text"
+                       maxlength="300"
+                       autocomplete="off"
+                       placeholder="Ask about their alibi, motive, evidence...">
+                <button type="submit" class="primary">SEND</button>
+            </div>
+        </form>
+
+        <div class="interrogation-actions">
+            <button type="button" id="interrogationClear" class="icon-btn">
+                CLEAR CHAT
+            </button>
+            <button type="button" id="interrogationClose" class="icon-btn">
+                END INTERROGATION
+            </button>
+        </div>
+
+        <p class="muted">
+            Responses are based on available case files.
+            Statements are not automatically verified facts.
+        </p>
+    `;
+
+    document.body.appendChild(terminal);
+
+    const select = terminal.querySelector("#interrogationSelect");
+    const chat = terminal.querySelector("#interrogationChat");
+
+    function renderChat() {
+        const person = interrogationPeople()
+            .find(p => p.id === activeInterrogation);
+
+        if (!person) return;
+
+        const messages = interrogationChats[activeInterrogation] || [];
+
+        chat.innerHTML = messages.length
+            ? messages.map(m => `
+                <div class="interrogation-message ${m.from}">
+                    <small>${m.from === "player" ? "DETECTIVE" : escapeHTML(person.name)}</small>
+                    <p>${escapeHTML(m.text)}</p>
+                </div>
+            `).join("")
+            : `<p class="muted">Connection established with ${escapeHTML(person.name)}.
+               Begin questioning.</p>`;
+
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    function openTerminal(id) {
+        const people = interrogationPeople();
+
+        select.innerHTML = people.map(p => `
+            <option value="${escapeHTML(p.id)}">
+                ${escapeHTML(p.name)}
+            </option>
+        `).join("");
+
+        activeInterrogation = people.some(p => p.id === id)
+            ? id : people[0]?.id;
+
+        if (!activeInterrogation) return;
+
+        select.value = activeInterrogation;
+        terminal.classList.remove("hidden");
+        renderChat();
+        terminal.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    select.addEventListener("change", () => {
+        activeInterrogation = select.value;
+        renderChat();
+    });
+
+    terminal.querySelector("#interrogationForm")
+        .addEventListener("submit", event => {
+            event.preventDefault();
+
+            const input = terminal.querySelector("#interrogationQuestion");
+            const question = input.value.trim();
+            if (!question || !activeInterrogation) return;
+
+            const person = interrogationPeople()
+                .find(p => p.id === activeInterrogation);
+
+            if (!person) return;
+
+            const history = interrogationChats[activeInterrogation] ||= [];
+            const answer = getInterrogationAnswer(person, question, history);
+
+            history.push({ from: "player", text: question });
+            history.push({ from: "suspect", text: answer });
+
+            input.value = "";
+            renderChat();
+            input.focus();
+        });
+
+    terminal.querySelector("#interrogationClear")
+        .addEventListener("click", () => {
+            if (!activeInterrogation) return;
+            interrogationChats[activeInterrogation] = [];
+            renderChat();
+        });
+
+    terminal.querySelector("#interrogationClose")
+        .addEventListener("click", () => {
+            terminal.classList.add("hidden");
+        });
+
+    // Add interrogation buttons to Chapter 1 suspect files.
+    const suspectList = document.querySelector("#suspectList");
+
+    if (suspectList) {
+        suspectList.addEventListener("click", event => {
+            const card = event.target.closest("[data-suspect]");
+            if (!card) return;
+
+            setTimeout(() => {
+                const detail = document.querySelector("#suspectDetail");
+                if (!detail) return;
+
+                const old = detail.querySelector(".start-interrogation");
+                if (old) old.remove();
+
+                const button = document.createElement("button");
+                button.className = "primary start-interrogation";
+                button.textContent = "INTERROGATE SUSPECT";
+                button.addEventListener("click", () =>
+                    openTerminal(card.dataset.suspect)
+                );
+
+                detail.appendChild(button);
+            }, 0);
+        });
+    }
+
+    // Add interrogation buttons to Chapters 2–4 dossiers.
+    const dossierList = document.querySelector("#chapterDossiers");
+
+    if (dossierList) {
+        dossierList.addEventListener("click", event => {
+            const dossier = event.target.closest(".chapter-dossier");
+            if (!dossier) return;
+
+            setTimeout(() => {
+                if (dossier.querySelector(".start-interrogation")) return;
+
+                const index = [...dossierList.children].indexOf(dossier);
+                if (index < 0) return;
+
+                const button = document.createElement("button");
+                button.className = "primary start-interrogation";
+                button.textContent = "INTERROGATE";
+                button.addEventListener("click", e => {
+                    e.preventDefault();
+                    openTerminal(`ch${currentChapter}-${index}`);
+                });
+
+                dossier.appendChild(button);
+            }, 0);
+        });
+    }
+}
+
+setupInterrogationTerminal();
